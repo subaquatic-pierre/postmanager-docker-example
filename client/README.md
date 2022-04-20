@@ -1,54 +1,46 @@
-# With Docker
+# Getting Started with Create React App
 
-## How to use
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-### Using `create-next-app`
+## Available Scripts
 
-Execute [`create-next-app`](https://github.com/segmentio/create-next-app) with [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) or [npx](https://github.com/zkat/npx#readme) to bootstrap the example:
+In the project directory, you can run:
 
-```bash
-npx create-next-app --example with-docker with-docker-app
-# or
-yarn create next-app --example with-docker with-docker-app
-```
+### `npm start`
 
-### Download manually
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-Download the example:
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-```bash
-curl https://codeload.github.com/zeit/next.js/tar.gz/canary | tar -xz --strip=2 next.js-canary/examples/with-docker
-cd with-docker
-```
+### `npm test`
 
-Build it with docker:
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-```bash
-# build
-docker build -t next-app .
-# or, use multi-stage builds to build a smaller docker image
-docker build -t next-app -f ./Dockerfile.multistage .
-```
+### `npm run build`
 
-Run it:
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-```bash
-docker run --rm -it \
-  -p 3000:3000 \
-  -e "API_URL=https://example.com" \
-  next-app
-```
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-Deploy it to the cloud with [now](https://zeit.co/now) ([download](https://zeit.co/download))
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-```bash
-now --docker -e API_URL="https://example.com"
-```
+### `npm run eject`
 
-## The idea behind the example
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-This example show how to set custom environment variables for your **docker application** at runtime.
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-The `dockerfile` is the simplest way to run Next.js app in docker, and the size of output image is `173MB`. However, for an even smaller build, you can do multi-stage builds with `dockerfile.multistage`. The size of output image is `85MB`.
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You can check the [Example Dockerfile for your own Node.js project](https://github.com/mhart/alpine-node/tree/43ca9e4bc97af3b1f124d27a2cee002d5f7d1b32#example-dockerfile-for-your-own-nodejs-project) section in [mhart/alpine-node](https://github.com/mhart/alpine-node) for more details.
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+## Learn More
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).

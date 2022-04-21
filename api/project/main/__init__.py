@@ -1,4 +1,4 @@
-from project.modules.main.routes import main
+from project.main.routes import main
 
 
 def initiate_app(app, **kwargs):

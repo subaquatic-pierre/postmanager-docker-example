@@ -1,5 +1,3 @@
-import sys
-import unittest
 from flask.cli import FlaskGroup
 from project import create_app
 

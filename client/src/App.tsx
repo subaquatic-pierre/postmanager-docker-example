@@ -1,27 +1,17 @@
 import React from "react";
 
-import axios from "axios";
+import Layout from "layout";
+import Routes from "routes";
 
-const CoolComponent: React.FC = () => {
-  const [response, setResponse] = React.useState("");
-
-  const getData = async () => {
-    const res = await axios.get("/api");
-
-    console.log(res);
-  };
-
-  React.useEffect(() => {
-    getData();
-  }, []);
-  return <div>Life</div>;
-};
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
-    <div>
-      <CoolComponent />
-    </div>
+    <Layout>
+      <BrowserRouter>
+        <Routes />
+      </BrowserRouter>
+    </Layout>
   );
 }
 

@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
-
 import Typography from '@mui/material/Typography';
-
 import ListItem from '@mui/material/ListItem';
+
+import Link from 'components/Link';
 
 interface Props {
   navItem: NavItem;
@@ -13,9 +12,9 @@ interface Props {
 const HeaderNavItem = ({ navItem }: Props): JSX.Element => {
   return (
     <ListItem>
-      <Typography component={() => <Link to={navItem.url} />}>
-        HeaderNavItem
-      </Typography>
+      <Link to={navItem.url}>
+        <Typography variant="h6">{navItem.title}</Typography>
+      </Link>
     </ListItem>
   );
 };

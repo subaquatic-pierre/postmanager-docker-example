@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 
-import Layout from "layout";
-import Routes from "routes";
+import Layout from 'layout';
+import Routes from 'routes';
 
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from 'react-router-dom';
 
 function App() {
   return (
-    <Layout>
-      <BrowserRouter>
+    <BrowserRouter>
+      <Layout>
         <Routes />
-      </BrowserRouter>
-    </Layout>
+      </Layout>
+    </BrowserRouter>
   );
 }
 

@@ -13,7 +13,12 @@ const CoolComponent = () => {
   React.useEffect(() => {
     getData();
   }, []);
-  return <div>Life</div>;
+  return (
+    <>
+      <div>Expost</div>
+      <div>Export</div>
+    </>
+  );
 };
 
 export default CoolComponent;

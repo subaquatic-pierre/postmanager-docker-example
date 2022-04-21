@@ -15,6 +15,6 @@ def index():
 
     post = post_manager.new_post(meta_data,content)
 
-    # post_manager.save_post(post)
+    post_manager.save_post(post)
 
     return post.to_json()

@@ -4,8 +4,10 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import Link from 'components/Link';
+
+import PostCardImage from 'components/PostCardImage';
 
 interface Props {
   data: PostMetaData;
@@ -14,23 +16,20 @@ interface Props {
 const PostGridItem = ({ data }: Props): JSX.Element => {
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <CardMedia
-        component="img"
-        image="https://source.unsplash.com/random"
-        alt="random"
-      />
+      <PostCardImage postId={data.id} mediaName="cover_photo" />
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography gutterBottom variant="h5" component="h2">
-          Heading
+          {data.title}
         </Typography>
-        <Typography>
-          This is a media card. You can use this section to describe the
-          content.
-        </Typography>
+        <Typography>{data.snippet}</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">View</Button>
-        <Button size="small">Edit</Button>
+        <Link to={`/post/${data.id}`}>
+          <Button size="small">View</Button>
+        </Link>
+        <Link to={`/post/${data.id}/edit`}>
+          <Button size="small">Edit</Button>
+        </Link>
       </CardActions>
     </Card>
   );

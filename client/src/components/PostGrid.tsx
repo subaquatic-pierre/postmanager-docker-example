@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import Grid from '@mui/material/Grid';
 
-import PostGridItem from 'components/PostGridItem';
+import PostGridItem from 'components/PostCard';
 
 const PostGrid = (): JSX.Element => {
   const [postMetaDataList, setPostMetaDataList] = React.useState<

@@ -5,24 +5,20 @@ import Grid from '@mui/material/Grid';
 
 import PostGridItem from 'components/PostCard';
 
+import { fetchData } from 'utils';
+
 const PostGrid = (): JSX.Element => {
   const [postMetaDataList, setPostMetaDataList] = React.useState<
     PostMetaData[]
   >([]);
-
-  const fetchData = async () => {
-    const url = 'api/posts';
-    try {
-      const res = await axios.get(url);
-      const data = res.data;
-      setPostMetaDataList(data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    fetchData();
+    const url = 'api/posts';
+
+    fetchData<PostMetaData[]>(url, setPostMetaDataList, false, [], true).then(
+      () => setLoading(false),
+    );
   }, []);
 
   return (

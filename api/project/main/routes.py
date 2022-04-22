@@ -20,6 +20,8 @@ def list_all():
 
     post = post_manager.new_post(meta_data,content)
 
+    index = post_manager.index
+
     # post_manager.save_post(post)
 
-    return jsonify([post.to_json(),post.to_json(),post.to_json(),post.to_json()])
+    return jsonify(index)

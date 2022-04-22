@@ -1,21 +1,21 @@
 import React from 'react';
 
-import Skeleton from '@mui/material/Skeleton';
 import CardMedia from '@mui/material/CardMedia';
+import Skeleton from '@mui/material/Skeleton';
 
 import { fetchData } from 'utils';
 
 interface Props {
   postId: string;
-  mediaName: string;
+  title: string;
 }
 
-const PostCardImage = ({ postId, mediaName }: Props): JSX.Element => {
+const PostHeroImage = ({ postId, title }: Props) => {
   const [imageSrc, setImageSrc] = React.useState('');
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const url = `/get-media?postId=${postId}&mediaName=${mediaName}`;
+    const url = `/get-media?postId=${postId}&mediaName=cover_photo`;
     fetchData<string>(
       url,
       setImageSrc,
@@ -31,11 +31,11 @@ const PostCardImage = ({ postId, mediaName }: Props): JSX.Element => {
       <CardMedia
         component={'img'}
         image={imageSrc}
-        alt="random"
+        alt={title}
         height="300px"
       />
     );
   }
 };
 
-export default PostCardImage;
+export default PostHeroImage;

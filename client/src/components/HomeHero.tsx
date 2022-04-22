@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Link from 'components/Link';
 
 const HomeHero = () => {
   return (
@@ -40,7 +41,9 @@ const HomeHero = () => {
           spacing={2}
           justifyContent="center"
         >
-          <Button variant="contained">New Post</Button>
+          <Link to="/post/create">
+            <Button variant="contained">New Post</Button>
+          </Link>
         </Stack>
       </Container>
     </Box>

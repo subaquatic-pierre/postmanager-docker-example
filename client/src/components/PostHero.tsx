@@ -4,7 +4,6 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
-import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 
 import { fetchData } from 'utils';
@@ -29,7 +28,7 @@ const PostHero = ({ postId, title }: Props): JSX.Element => {
   }, []);
 
   if (loading) {
-    return <Skeleton animation="wave" variant="rectangular" height="300px" />;
+    return <Skeleton animation="wave" variant="rectangular" height="400px" />;
   } else {
     return (
       <Paper
@@ -39,7 +38,7 @@ const PostHero = ({ postId, title }: Props): JSX.Element => {
           color: '#fff',
           mb: 4,
           backgroundSize: 'cover',
-          height: '300px',
+          height: '400px',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
           backgroundImage: `url(${imageSrc})`,

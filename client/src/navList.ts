@@ -1,3 +1,3 @@
-const navList: [NavItem] = [{ title: 'New Post', url: 'new-post' }];
+const navList: [NavItem] = [{ title: 'New Post', url: '/post/create' }];
 
 export default navList;

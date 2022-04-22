@@ -1,19 +1,32 @@
 import React from 'react';
 
+import Skeleton from '@mui/material/Skeleton';
+
 import Page from 'components/Page';
 import PostHero from 'components/PostHero';
-import Skeleton from '@mui/material/Skeleton';
+import PostContentSkeleton from 'components/PostContentSkeleton';
+import PostContent from 'components/PostContent';
 
 import { fetchData } from 'utils';
 import { useParams } from 'react-router';
+import { paragraph } from 'filler';
+
+const paragraphObject = {
+  type: 'paragraph',
+  content: paragraph,
+};
+
+const parArr = new Array(5).fill(paragraphObject);
+
+const defaultContent = [...parArr];
 
 const defaultPost: Post = {
   metaData: {
-    id: 'cool',
+    id: '42',
     title: 'cool',
     snippet: 'cool',
   },
-  content: 'Cool post content',
+  content: defaultContent,
   media: [],
 };
 
@@ -34,9 +47,14 @@ const Post = (): JSX.Element => {
   return (
     <Page>
       {loading ? (
-        <PostHero title={title} postId={postId} />
-      ) : (
         <Skeleton variant="rectangular" height="400px" />
+      ) : (
+        <PostHero title={title} postId={postId} />
+      )}
+      {loading ? (
+        <PostContentSkeleton />
+      ) : (
+        <PostContent postId={postId} title={title} content={defaultContent} />
       )}
     </Page>
   );

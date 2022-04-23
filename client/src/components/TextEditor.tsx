@@ -1,26 +1,41 @@
 import React from 'react';
 
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import {
+  EditorState,
+  convertFromRaw,
+  convertToRaw,
+  ContentState,
+} from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 import Box from '@mui/material/Box';
 
 interface Props {
   setContent: (data: any) => void;
+  content?: any;
 }
 
-const TextEditor = ({ setContent }: Props): JSX.Element => {
-  let _contentState = ContentState.createFromText('Sample content state');
-  const raw = convertToRaw(_contentState);
-  const [contentState, setContentState] = React.useState(raw);
-  // const [editorState, setEditorState] = React.useState(
-  //   EditorState.createEmpty(),
-  // );
+const TextEditor = ({ setContent, content }: Props): JSX.Element => {
+  let _editorState = EditorState.createEmpty();
 
-  // const handleEditChange = (event: any) => {
-  //   setEditorState(event);
-  // };
+  if (content !== undefined) {
+    const _content = convertFromRaw(content);
+    _editorState = EditorState.createWithContent(_content);
+  }
+  const [editorState, setEditorState] = React.useState(_editorState);
+
+  const handleEditorChange = (event: any) => {
+    // Update editor state
+    setEditorState(event);
+
+    // Update blocks on form data
+    const content = editorState.getCurrentContent();
+    const blocks = convertToRaw(content);
+    setContent(blocks);
+  };
+
+  React.useEffect(() => {}, [editorState]);
 
   return (
     <Box
@@ -33,11 +48,11 @@ const TextEditor = ({ setContent }: Props): JSX.Element => {
       }}
     >
       <Editor
-        defaultContentState={contentState}
+        editorState={editorState}
         toolbarClassName="toolbarClassName"
         wrapperClassName="wrapperClassName"
         editorClassName="editorClassName"
-        onEditorStateChange={setContentState}
+        onEditorStateChange={handleEditorChange}
         toolbar={{
           inline: { inDropdown: true },
           list: { inDropdown: true },

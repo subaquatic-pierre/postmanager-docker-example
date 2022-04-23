@@ -47,11 +47,11 @@ const CreatePost = (): JSX.Element => {
 
   return (
     <Page>
-      {data.coverPhoto ? (
-        <PostHeroImage photoUrl={`${data.coverPhoto}`} />
-      ) : (
-        <Skeleton animation="wave" variant="rectangular" height="400px" />
-      )}
+      <PostHeroImage
+        imageSrc={`${data.coverPhoto}`}
+        title={data.title}
+        loading={!data.coverPhoto}
+      />
 
       <Grid container spacing={4} sx={{ mt: 1, mb: 10 }}>
         <Grid item xs={12} sm={6}>

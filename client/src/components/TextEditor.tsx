@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState } from 'draft-js';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 import Paper from '@mui/material/Paper';
@@ -18,9 +18,16 @@ interface Props {
 }
 
 const TextEditor = ({ setContent }: Props): JSX.Element => {
-  const [editorState, setEditorState] = React.useState(
-    EditorState.createEmpty(),
-  );
+  let _contentState = ContentState.createFromText('Sample content state');
+  const raw = convertToRaw(_contentState);
+  const [contentState, setContentState] = React.useState(raw);
+  // const [editorState, setEditorState] = React.useState(
+  //   EditorState.createEmpty(),
+  // );
+
+  // const handleEditChange = (event: any) => {
+  //   setEditorState(event);
+  // };
 
   return (
     <Box
@@ -33,11 +40,18 @@ const TextEditor = ({ setContent }: Props): JSX.Element => {
       }}
     >
       <Editor
-        editorState={editorState}
+        defaultContentState={contentState}
         toolbarClassName="toolbarClassName"
         wrapperClassName="wrapperClassName"
         editorClassName="editorClassName"
-        onEditorStateChange={setEditorState}
+        onEditorStateChange={setContentState}
+        toolbar={{
+          inline: { inDropdown: true },
+          list: { inDropdown: true },
+          textAlign: { inDropdown: true },
+          link: { inDropdown: true },
+          history: { inDropdown: true },
+        }}
       />
     </Box>
   );

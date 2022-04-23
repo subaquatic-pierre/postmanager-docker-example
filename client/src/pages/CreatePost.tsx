@@ -3,7 +3,6 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import Skeleton from '@mui/material/Skeleton';
 
 import Page from 'components/Page';
 import CreatePostMeta from 'components/CreatePostMeta';
@@ -11,14 +10,7 @@ import CreatePostImage from 'components/CreatePostImage';
 import TextEditor from 'components/TextEditor';
 import PostHeroImage from 'components/PostHeroImage';
 
-interface PostData {
-  title: string;
-  tags: string;
-  coverPhoto: string | ArrayBuffer;
-  content: any;
-}
-
-const defaultValues: PostData = {
+const defaultValues: PostFormData = {
   title: '',
   tags: '',
   coverPhoto: '',

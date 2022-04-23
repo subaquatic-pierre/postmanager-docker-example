@@ -25,6 +25,7 @@ const defaultPost: Post = {
     id: '42',
     title: 'cool',
     snippet: 'cool',
+    tags: 'cool tags',
   },
   content: defaultContent,
   media: [],
@@ -46,11 +47,7 @@ const Post = (): JSX.Element => {
 
   return (
     <Page>
-      {loading ? (
-        <Skeleton variant="rectangular" height="400px" />
-      ) : (
-        <PostHero title={title} postId={postId} />
-      )}
+      <PostHero title={title} postId={postId} />
       {loading ? (
         <PostContentSkeleton />
       ) : (

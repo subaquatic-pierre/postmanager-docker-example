@@ -47,10 +47,10 @@ const PostForm = ({
     }));
   };
 
-  const setContent = (data: any) => {
+  const setContent = (content: any) => {
     setFormData((oldData) => ({
       ...oldData,
-      content: data,
+      content,
     }));
   };
 

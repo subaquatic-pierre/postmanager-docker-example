@@ -15,6 +15,9 @@ def create_app(flask_config_name=None, **kwargs):
 
     CORS(app)
 
+    from project import graphql
+    graphql.initiate_app(app)
+
     from project import main
     main.initiate_app(app)
 

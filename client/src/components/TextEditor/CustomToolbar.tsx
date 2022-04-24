@@ -21,7 +21,7 @@ interface Props {
 
 const CustomToolbar = ({ Toolbar }: Props): JSX.Element => {
   return (
-    <Box sx={{ mt: 3 }}>
+    <Box sx={{ mb: 2 }}>
       <Toolbar>
         {(externalProps) => (
           <>

@@ -1,12 +1,14 @@
-from graphene import ObjectType, String,Schema
+from graphene import ObjectType, Schema
+from project.graphql.query import PostQuery
+from project.graphql.mutation import Mutations
 
-class ExampleQuery(ObjectType):
-    hello = String()
-    
-    def resolve_hello(self, info):
-        return "Hello"
 
-class RootQuery(ExampleQuery, ObjectType):
+class RootQuery(PostQuery, ObjectType):
     pass
 
-schema = Schema(query=RootQuery)
+
+class RootMutation(Mutations, ObjectType):
+    pass
+
+
+schema = Schema(query=RootQuery, mutation=RootMutation)

@@ -1,24 +1,21 @@
-from flask import Blueprint,jsonify
-from postmanager.manager import PostManager
+from flask import Blueprint, jsonify
+from project import post_manager
 
-main = Blueprint('main', __name__)
+main = Blueprint("main", __name__)
 
-post_manager = PostManager.setup_local()
 
-@main.route('/api')
+@main.route("/api")
 def index():
 
-    return {'main':'Main PostManager API root resource'}
+    return {"main": "Main PostManager API root resource"}
 
-@main.route('/api/posts')
+
+@main.route("/api/posts")
 def list_all():
-    meta_data = {"title":"first"}
-    content = {
-        "Header": "The best life",
-        "Paragraph":"Thank you for being there"
-    }
+    meta_data = {"title": "first"}
+    content = {"Header": "The best life", "Paragraph": "Thank you for being there"}
 
-    post = post_manager.new_post(meta_data,content)
+    post = post_manager.new_post(meta_data, content)
 
     index = post_manager.index
 

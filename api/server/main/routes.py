@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from project import post_manager
+from server import post_manager
 
 main = Blueprint("main", __name__)
 

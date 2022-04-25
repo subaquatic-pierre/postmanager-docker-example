@@ -1,6 +1,6 @@
 from graphene import ObjectType, String, Int, Field, List
 
-from project import post_manager
+from server import post_manager
 
 
 mock_meta_data = {"id": 1, "title": "Cool post", "tags": "cool tags"}
@@ -16,7 +16,11 @@ mock_post = {
 }
 
 
-class MediaItem(ObjectType):
+class MediaData(ObjectType):
+    data_src = String()
+
+
+class MediaIndexItem(ObjectType):
     media_name = String()
     filename = String()
 
@@ -26,10 +30,16 @@ class PostMetaData(ObjectType):
     title = String()
     tags = String()
 
+    @staticmethod
+    def from_dict(meta_data_dict):
+        return PostMetaData(
+            meta_data_dict["id"], meta_data_dict["title"], meta_data_dict["tags"]
+        )
+
 
 class Post(ObjectType):
     meta_data = Field(PostMetaData)
-    media_data = Field(List(MediaItem))
+    media_data = Field(List(MediaIndexItem))
     content = String()
 
 
@@ -45,13 +55,10 @@ class PostQuery(ObjectType):
 
         media_list = []
         for media_name, data in post.media_index.items():
-            media_item = MediaItem(media_name, data["filename"])
+            media_item = MediaIndexItem(media_name, data["filename"])
             media_list.append(media_item)
 
-        post_meta_data = PostMetaData(
-            post.meta_data.id, post.meta_data.title, post.meta_data.tags
-        )
-
+        post_meta_data = PostMetaData.from_dict(post.meta_data.to_json())
         post = Post(
             meta_data=post_meta_data,
             media_data=media_list,
@@ -60,18 +67,24 @@ class PostQuery(ObjectType):
 
         return post
 
-    def resolve_post_meta_data(root, info):
-        # Build meta
-        return PostMetaData(id=1, title="Cool", tags="cool post")
+    def resolve_post_meta_data(root, info, post_id):
+        post = post_manager.get_by_id(post_id)
+        post_meta_data_dict = post.meta_data.to_json()
+        return PostMetaData.from_dict(post_meta_data_dict)
 
     def resolve_all_post_meta_data(root, info):
-        # Get postmanager index
+        all_meta_data = []
+        for meta_data in post_manager.index:
+            post_meta_data = PostMetaData(
+                meta_data["id"], meta_data["title"], meta_data["tags"]
+            )
+            all_meta_data.append(post_meta_data)
 
         # Build meta data list from index
-        return [PostMetaData(id=1, title="cool", tags="cool tags")]
+        return all_meta_data
 
     def resolve_media_data(root, info, post_id, media_name):
-        # Call get media from post manager
+        post = post_manager.get_by_id(post_id)
+        media_src = post.get_media(media_name)
 
-        # Return media_data string
-        pass
+        return MediaData(data_src=media_src)

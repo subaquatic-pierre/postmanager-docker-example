@@ -14,7 +14,7 @@ services:
     environment:
       - FLASK_CONFIG=development
       - FLASK_ENV=development
-      - APP_SETTINGS=project.config.DevelopmentConfig
+      - APP_SETTINGS=server.config.DevelopmentConfig
       - SECRET_KEY=ZQbn05PDeA7v11
 
   nginx:

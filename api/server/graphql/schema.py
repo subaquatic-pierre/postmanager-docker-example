@@ -1,13 +1,14 @@
 from graphene import ObjectType, Schema
-from project.graphql.query import PostQuery
-from project.graphql.mutation import Mutations
+
+from server.graphql.query.post import PostQuery
+from server.graphql.mutation.post import PostMutation
 
 
 class RootQuery(PostQuery, ObjectType):
     pass
 
 
-class RootMutation(Mutations, ObjectType):
+class RootMutation(PostMutation, ObjectType):
     pass
 
 

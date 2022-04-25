@@ -1,24 +1,26 @@
 import React from 'react';
+import { useQuery } from '@apollo/client';
 
 import Grid from '@mui/material/Grid';
 
 import PostGridItem from 'components/PostCard';
 
-import { fetchData } from 'utils';
+import { ALL_POST_META_DATA } from 'queries';
 
 const PostGrid = (): JSX.Element => {
+  const { loading, error, data } = useQuery(ALL_POST_META_DATA);
   const [postMetaDataList, setPostMetaDataList] = React.useState<
     PostMetaData[]
   >([]);
-  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const url = 'api/posts';
+    if (data) {
+      setPostMetaDataList(data.allPostMetaData);
+    }
+  }, [data]);
 
-    fetchData<PostMetaData[]>(url, setPostMetaDataList, false, [], true).then(
-      () => setLoading(false),
-    );
-  }, []);
+  if (loading) return <div>Loading ...</div>;
+  if (error) return <div>Error {JSON.stringify(error)}</div>;
 
   return (
     <Grid container spacing={4} sx={{ mt: 1, mb: 10 }}>

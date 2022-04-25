@@ -1,15 +1,14 @@
 import React from 'react';
-
-import Skeleton from '@mui/material/Skeleton';
+import { useQuery } from '@apollo/client';
 
 import Page from 'components/Page';
 import PostHero from 'components/PostHero';
 import PostContentSkeleton from 'components/PostContentSkeleton';
 import PostContent from 'components/PostContent';
 
-import { fetchData } from 'utils';
 import { useParams } from 'react-router';
 import { paragraph } from 'filler';
+import { GET_POST } from 'queries';
 
 const paragraphObject = {
   type: 'paragraph',
@@ -32,18 +31,21 @@ const defaultPost: Post = {
 };
 
 const Post = (): JSX.Element => {
-  const { id } = useParams();
+  const { id: postId } = useParams();
+  const { loading, error, data } = useQuery(GET_POST, {
+    variables: { postId },
+  });
+
   const [postData, setPostData] = React.useState<Post>(defaultPost);
-  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const url = `/api/post/${id}`;
-    fetchData<Post>(url, setPostData, false, defaultPost).then(() =>
-      setLoading(false),
-    );
-  }, []);
+    if (data) {
+      setPostData(data.post);
+    }
+  }, [data, loading]);
 
-  const { id: postId, title } = postData.metaData;
+  const { title } = postData.metaData;
+  if (error) return <div>Error {JSON.stringify(error)}</div>;
 
   return (
     <Page>

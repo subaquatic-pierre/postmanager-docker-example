@@ -16,13 +16,9 @@ mock_post = {
 }
 
 
-class MediaIndexItem(ObjectType):
-    file_type = String()
+class MediaItem(ObjectType):
+    media_name = String()
     filename = String()
-
-
-class MediaData(ObjectType):
-    cover_photo = Field(MediaIndexItem)
 
 
 class PostMetaData(ObjectType):
@@ -33,7 +29,7 @@ class PostMetaData(ObjectType):
 
 class Post(ObjectType):
     meta_data = Field(PostMetaData)
-    media_data = Field(MediaData)
+    media_data = Field(List(MediaItem))
     content = String()
 
 
@@ -41,24 +37,27 @@ class PostQuery(ObjectType):
     all_post_meta_data = Field(List(PostMetaData))
     post_meta_data = Field(PostMetaData, post_id=String(required=True))
     post = Field(Post, post_id=String(required=True))
+
     media_data = String(post_id=String(required=True), media_name=String(required=True))
 
     def resolve_post(root, info, post_id):
-        index_item = MediaIndexItem(
-            mock_media_data["cover_photo"]["file_type"],
-            mock_media_data["cover_photo"]["filename"],
-        )
+        post = post_manager.get_by_id(post_id)
 
-        media_data = MediaData(index_item)
+        media_list = []
+        for media_name, data in post.media_index.items():
+            media_item = MediaItem(media_name, data["filename"])
+            media_list.append(media_item)
+
         post_meta_data = PostMetaData(
-            mock_meta_data["id"], mock_meta_data["title"], mock_meta_data["tags"]
+            post.meta_data.id, post.meta_data.title, post.meta_data.tags
         )
 
         post = Post(
             meta_data=post_meta_data,
-            media_data=media_data,
-            content=mock_post["content"],
+            media_data=media_list,
+            content=post.content,
         )
+
         return post
 
     def resolve_post_meta_data(root, info):

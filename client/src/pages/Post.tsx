@@ -5,6 +5,7 @@ import Page from 'components/Page';
 import PostHero from 'components/PostHero';
 import PostContentSkeleton from 'components/PostContentSkeleton';
 import PostContent from 'components/PostContent';
+import PostMetaData from 'components/PostMetaData';
 
 import { useParams } from 'react-router';
 import { paragraph } from 'filler';
@@ -21,12 +22,12 @@ const defaultContent = [...parArr];
 
 const defaultPost: Post = {
   metaData: {
-    id: '42',
-    title: 'cool',
-    snippet: 'cool',
-    tags: 'cool tags',
+    id: '',
+    title: '',
+    snippet: '',
+    tags: '',
   },
-  content: defaultContent,
+  content: [],
   media: [],
 };
 
@@ -40,20 +41,30 @@ const Post = (): JSX.Element => {
 
   React.useEffect(() => {
     if (data) {
-      setPostData(data.post);
+      JSON.parse(data.post.content);
+      setPostData({
+        ...data.post,
+        content: JSON.parse(data.post.content),
+      });
+      console.log(data.post);
     }
   }, [data, loading]);
 
-  const { title } = postData.metaData;
   if (error) return <div>Error {JSON.stringify(error)}</div>;
 
   return (
     <Page>
-      <PostHero title={title} postId={postId} />
+      <PostHero title={postData.metaData.title} postId={postId} />
       {loading ? (
         <PostContentSkeleton />
       ) : (
-        <PostContent postId={postId} title={title} content={defaultContent} />
+        <>
+          <PostMetaData metaData={postData.metaData} />
+          <PostContent
+            metaData={postData.metaData}
+            content={postData.content}
+          />
+        </>
       )}
     </Page>
   );

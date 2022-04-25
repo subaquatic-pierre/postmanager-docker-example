@@ -1,4 +1,5 @@
 import React from 'react';
+import { useMutation } from '@apollo/client';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -10,12 +11,11 @@ import TextEditor from 'components/TextEditor';
 import PostHeroImage from 'components/PostHeroImage';
 
 import { content } from 'filler';
+import { CREATE_POST, EDIT_POST } from 'queries';
 
 interface Props {
   isEditPost: boolean;
   postId?: string;
-  postData?: any;
-  imageSrc?: any;
 }
 
 const defaultValues: PostFormData = {
@@ -25,13 +25,15 @@ const defaultValues: PostFormData = {
   content,
 };
 
-const PostForm = ({
-  postId,
-  isEditPost,
-  postData,
-  imageSrc,
-}: Props): JSX.Element => {
+const PostForm = ({ postId, isEditPost }: Props): JSX.Element => {
   const [formData, setFormData] = React.useState<PostFormData>(defaultValues);
+  const [
+    createPost,
+    { data: createData, loading: createLoading, error: createError },
+  ] = useMutation(CREATE_POST);
+
+  const [editPost, { data: editData, loading: editLoading, error: editError }] =
+    useMutation(EDIT_POST);
 
   const handleTextInputChange = (e: any) => {
     setFormData((oldData) => ({
@@ -55,18 +57,52 @@ const PostForm = ({
   };
 
   const handleSubmitClick = () => {
+    interface IVars {
+      postId?: string;
+      title: string;
+      tags: string;
+      content: string;
+      mediaData?: any;
+    }
+    let variables: IVars = {
+      title: formData.title,
+      tags: formData.tags,
+      content: JSON.stringify(formData.content),
+    };
+    if (formData.coverPhoto !== '') {
+      variables = {
+        ...variables,
+        mediaData: [
+          {
+            mediaName: 'cover_photo',
+            dataUrl: formData.coverPhoto,
+          },
+        ],
+      };
+    }
     if (isEditPost) {
-      const url = `api/${postId}/edit`;
-
+      editPost({
+        variables: {
+          postId,
+          ...variables,
+        },
+      });
       // PUT METHOD
     } else {
-      const url = `api/${postId}`;
-
-      // POST METHOD
+      createPost({ variables });
     }
     console.log('is edit post', isEditPost);
     console.log(formData);
+    console.log(editError);
   };
+
+  React.useEffect(() => {
+    console.log(editError);
+  }, [editError]);
+
+  if (editError) {
+    console.log(editError);
+  }
 
   //   React.useEffect(() => {
   //     if (isEditPost) {

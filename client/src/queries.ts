@@ -26,3 +26,61 @@ export const GET_POST = gql`
     }
   }
 `;
+
+export const CREATE_POST = gql`
+  mutation CreatePost(
+    $title: String!
+    $tags: String!
+    $content: String!
+    $mediaData: [PostMediaDataInput]
+  ) {
+    createPost(
+      title: $title
+      tags: $tags
+      content: $content
+      mediaData: $mediaData
+    ) {
+      post {
+        metaData {
+          id
+          title
+          tags
+        }
+        mediaData {
+          mediaName
+        }
+        content
+      }
+    }
+  }
+`;
+
+export const EDIT_POST = gql`
+  mutation EditPost(
+    $postId: String!
+    $title: String!
+    $tags: String!
+    $content: String!
+    $mediaData: [PostMediaDataInput]
+  ) {
+    editPost(
+      postId: $postId
+      title: $title
+      tags: $tags
+      content: $content
+      mediaData: $mediaData
+    ) {
+      post {
+        metaData {
+          id
+          title
+          tags
+        }
+        mediaData {
+          mediaName
+        }
+        content
+      }
+    }
+  }
+`;

@@ -2,13 +2,9 @@ import React from 'react';
 
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-
-import Link from 'components/Link';
 
 interface Props {
-  postId: string;
-  title: string;
+  metaData: PostMetaData;
   content: any;
 }
 
@@ -40,42 +36,19 @@ const renderComponent = (
   }
 };
 
-const PostContent = ({ title, content, postId }: Props) => {
+const PostContent = ({ metaData, content }: Props) => {
+  const [blocks, setBlocks] = React.useState([]);
+
+  React.useEffect(() => {
+    if (content.blocks !== undefined) {
+      setBlocks(content.blocks);
+    }
+  }, [content]);
+
   return (
-    <>
-      <Box
-        sx={{ mt: 2 }}
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Box>
-          <Typography variant="h2">{title}</Typography>
-          <Typography variant="body2">Tags: {title}</Typography>
-        </Box>
-        <Box>
-          <Link to={`/post/${postId}/edit`}>
-            <Button sx={{ mr: 1 }} color="success" variant="contained">
-              Edit
-            </Button>
-          </Link>
-          <Button sx={{ mr: 1 }} variant="contained">
-            Change Cover
-          </Button>
-          <Button sx={{ mr: 1 }} color="error" variant="contained">
-            Delete
-          </Button>
-          <Button sx={{ mr: 1 }} color="error" variant="contained">
-            Delete Cover
-          </Button>
-        </Box>
-      </Box>
-      <Box sx={{ mt: 2 }}>
-        {content.map((block, i) =>
-          renderComponent(block.type, block.content, i),
-        )}
-      </Box>
-    </>
+    <Box sx={{ mt: 2 }}>
+      {blocks.map((block, i) => renderComponent(block.type, block.text, i))}
+    </Box>
   );
 };
 

@@ -34,12 +34,7 @@ const EditPost = (): JSX.Element => {
       {loading ? (
         <PostContentSkeleton />
       ) : (
-        <PostForm
-          postId={postId}
-          isEditPost={true}
-          postData={postData}
-          imageSrc={imageSrc}
-        />
+        <PostForm postId={postId} isEditPost={true} />
       )}
     </Page>
   );

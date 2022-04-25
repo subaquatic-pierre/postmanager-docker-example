@@ -18,7 +18,6 @@ const { Toolbar } = toolbarPlugin;
 const plugins = [toolbarPlugin];
 
 const TextEditor = ({ setContent, content }: Props): JSX.Element => {
-  const theme = useTheme();
   const editorRef = React.useRef(null);
   const boxRef = React.useRef(null);
 

@@ -46,7 +46,6 @@ const Post = (): JSX.Element => {
         ...data.post,
         content: JSON.parse(data.post.content),
       });
-      console.log(data.post);
     }
   }, [data, loading]);
 

@@ -6,16 +6,23 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 interface Props {
-  handleInputChange: (event: any) => void;
+  setFormData: (event: any) => void;
   data: any;
 }
 
-const CreatePostMeta = ({ handleInputChange, data }: Props): JSX.Element => {
+const CreatePostMeta = ({ setFormData, data }: Props): JSX.Element => {
+  const handleTextInputChange = (e: any) => {
+    setFormData((oldData) => ({
+      ...oldData,
+      [e.target.id]: e.target.value,
+    }));
+  };
+
   return (
     <Box component="form" noValidate autoComplete="off">
       <Stack spacing={2}>
         <TextField
-          onChange={handleInputChange}
+          onChange={handleTextInputChange}
           value={data.title}
           fullWidth
           id="title"
@@ -23,7 +30,7 @@ const CreatePostMeta = ({ handleInputChange, data }: Props): JSX.Element => {
           variant="outlined"
         />
         <TextField
-          onChange={handleInputChange}
+          onChange={handleTextInputChange}
           value={data.tags}
           id="tags"
           label="Tags"

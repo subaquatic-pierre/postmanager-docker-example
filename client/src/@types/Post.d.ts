@@ -17,3 +17,11 @@ interface PostFormData {
   coverPhoto: string | ArrayBuffer;
   content: any;
 }
+
+interface IPostEditCreateVars {
+  postId?: string;
+  title: string;
+  tags: string;
+  content: string;
+  mediaData?: any;
+}

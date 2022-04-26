@@ -7,7 +7,7 @@ ENV WDS_SOCKET_PORT=0
 # install and cache app dependencies
 COPY package.json /usr/src/app/package.json
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 EXPOSE 3000
 CMD ["npm", "start"]

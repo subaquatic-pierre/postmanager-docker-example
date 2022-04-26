@@ -1,9 +1,10 @@
 import React from 'react';
+import { useQuery } from '@apollo/client';
 
 import Skeleton from '@mui/material/Skeleton';
 import CardMedia from '@mui/material/CardMedia';
 
-import { fetchData } from 'utils';
+import { GET_MEDIA } from 'queries';
 
 interface Props {
   postId: string;
@@ -14,15 +15,16 @@ const PostCardImage = ({ postId, mediaName }: Props): JSX.Element => {
   const [imageSrc, setImageSrc] = React.useState('');
   const [loading, setLoading] = React.useState(true);
 
+  const { error, data } = useQuery(GET_MEDIA, {
+    variables: { postId, mediaName: 'cover_photo' },
+  });
+
   React.useEffect(() => {
-    const url = `/get-media?postId=${postId}&mediaName=${mediaName}`;
-    fetchData<string>(
-      url,
-      setImageSrc,
-      'imageSrc',
-      'https://source.unsplash.com/random',
-    ).then(() => setLoading(false));
-  }, []);
+    if (!error && data && !data.mediaData.dataSrc.includes('Error')) {
+      setImageSrc(data.mediaData.dataSrc);
+      setLoading(false);
+    }
+  }, [data, error]);
 
   if (loading) {
     return <Skeleton animation="wave" variant="rectangular" height="300px" />;

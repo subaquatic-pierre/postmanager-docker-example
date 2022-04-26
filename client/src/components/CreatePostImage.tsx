@@ -21,7 +21,6 @@ const CreatePostImage = ({ formData, setFormData }: Props) => {
     setFormData((oldData) => ({
       ...oldData,
       mediaData: [
-        ...oldData.mediaData,
         {
           mediaName: 'cover_photo',
           dataUrl: dataUrl,

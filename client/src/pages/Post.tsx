@@ -47,7 +47,6 @@ const Post = (): JSX.Element => {
       } catch {
         content = { blocks: [{ type: 'unstyled', text: data.post.content }] };
       }
-      console.log(content);
       setPostData({
         ...data.post,
         content,

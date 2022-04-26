@@ -46,8 +46,10 @@ const CreatePost = (): JSX.Element => {
       title: formData.title,
       tags: formData.tags,
       content: JSON.stringify(formData.content),
-      mediaData: [],
+      mediaData: formData.mediaData,
     };
+
+    console.log(variables);
 
     const res = await createPost({ variables });
     if (res.errors) {

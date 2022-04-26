@@ -6,14 +6,14 @@ import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 interface Props {
   setContent: (data: any) => void;
   editorRef: any;
-  content?: any;
+  content: string;
   plugins?: any;
 }
 
 const CustomEditor = ({ setContent, editorRef, content, plugins }: Props) => {
   let _editorState = EditorState.createEmpty();
 
-  if (content !== undefined) {
+  if (content !== '') {
     const _content = convertFromRaw(content);
     _editorState = EditorState.createWithContent(_content);
   }

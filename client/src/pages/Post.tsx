@@ -28,7 +28,7 @@ const defaultPost: Post = {
     tags: '',
   },
   content: [],
-  media: [],
+  mediaData: [],
 };
 
 const Post = (): JSX.Element => {
@@ -41,30 +41,28 @@ const Post = (): JSX.Element => {
 
   React.useEffect(() => {
     if (data) {
-      JSON.parse(data.post.content);
+      let content;
+      try {
+        content = JSON.parse(data.post.content);
+      } catch {
+        content = { blocks: [{ type: 'unstyled', text: data.post.content }] };
+      }
+      console.log(content);
       setPostData({
         ...data.post,
-        content: JSON.parse(data.post.content),
+        content,
       });
     }
   }, [data, loading]);
 
   if (error) return <div>Error {JSON.stringify(error)}</div>;
 
+  if (loading) return <PostContentSkeleton />;
   return (
     <Page>
       <PostHero title={postData.metaData.title} postId={postId} />
-      {loading ? (
-        <PostContentSkeleton />
-      ) : (
-        <>
-          <PostMetaData metaData={postData.metaData} />
-          <PostContent
-            metaData={postData.metaData}
-            content={postData.content}
-          />
-        </>
-      )}
+      <PostMetaData metaData={postData.metaData} />
+      <PostContent metaData={postData.metaData} content={postData.content} />
     </Page>
   );
 };

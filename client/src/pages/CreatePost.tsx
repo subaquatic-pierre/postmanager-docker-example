@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { useMutation } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 
 import Page from 'components/Page';
 
@@ -15,59 +17,45 @@ import PostHeroImage from 'components/PostHeroImage';
 import { content } from 'filler';
 import { CREATE_POST } from 'queries';
 
-interface Props {
-  isEditPost: boolean;
-  postId?: string;
-  imageSrc?: string;
-  postData?: Post;
-}
-
-const defaultValues: PostFormData = {
+const defaultValues: CreatePostFormData = {
   title: '',
   tags: '',
-  coverPhoto: '',
-  content,
+  content: '',
+  mediaData: [],
 };
 
 const CreatePost = (): JSX.Element => {
-  const [formData, setFormData] = React.useState<PostFormData>(defaultValues);
+  const navigate = useNavigate();
+  const [formData, setFormData] =
+    React.useState<CreatePostFormData>(defaultValues);
 
   const [createPost, { data, loading, error }] = useMutation(CREATE_POST);
 
-  const setImageData = (data: any) => {
-    setFormData((oldData) => ({
-      ...oldData,
-      coverPhoto: data,
-    }));
+  const getCoverPhotoSrc = (): string => {
+    let dataUrl = '';
+    formData.mediaData.forEach((mediaItem) => {
+      if (mediaItem.mediaName === 'cover_photo') {
+        dataUrl = mediaItem.dataUrl;
+      }
+    });
+    return dataUrl;
   };
 
-  const setContent = (content: any) => {
-    setFormData((oldData) => ({
-      ...oldData,
-      content,
-    }));
-  };
-
-  const handleSubmitClick = () => {
-    let variables: IPostEditCreateVars = {
+  const handleSubmitClick = async () => {
+    let variables: CreatePostFormData = {
       title: formData.title,
       tags: formData.tags,
       content: JSON.stringify(formData.content),
+      mediaData: [],
     };
 
-    if (formData.coverPhoto !== '') {
-      variables = {
-        ...variables,
-        mediaData: [
-          {
-            mediaName: 'cover_photo',
-            dataUrl: formData.coverPhoto,
-          },
-        ],
-      };
+    const res = await createPost({ variables });
+    if (res.errors) {
+      console.log(res);
     }
-
-    createPost({ variables });
+    if (res.data) {
+      navigate('/', { state: { refetchPosts: true } });
+    }
   };
 
   // Set form data if is edit post
@@ -75,18 +63,18 @@ const CreatePost = (): JSX.Element => {
   return (
     <Page>
       <PostHeroImage
-        imageSrc={`${formData.coverPhoto}`}
+        imageSrc={getCoverPhotoSrc()}
         title={formData.title}
-        loading={formData.coverPhoto === ''}
+        loading={getCoverPhotoSrc() === ''}
       />
 
       <Grid container spacing={4} sx={{ mt: 1, mb: 10 }}>
         <Grid item xs={12} sm={6}>
           <CreatePostMeta data={formData} setFormData={setFormData} />
         </Grid>
-        <CreatePostImage setImageData={setImageData} />
+        <CreatePostImage formData={formData} setFormData={setFormData} />
       </Grid>
-      <TextEditor setContent={setContent} />
+      <TextEditor data={formData} setFormData={setFormData} />
       <Box sx={{ mb: 4 }} display="flex" justifyContent="flex-end">
         <Button onClick={handleSubmitClick} sx={{ mr: 1 }} variant="contained">
           Submit

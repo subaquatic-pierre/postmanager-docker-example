@@ -1,8 +1,9 @@
 import React from 'react';
+import { useQuery } from '@apollo/client';
 
 import PostHeroImage from 'components/PostHeroImage';
 
-import { fetchData } from 'utils';
+import { GET_MEDIA } from 'queries';
 
 interface Props {
   postId: string;
@@ -11,19 +12,23 @@ interface Props {
 
 const PostHero = ({ postId, title }: Props): JSX.Element => {
   const [imageSrc, setImageSrc] = React.useState('');
-  const [loading, setLoading] = React.useState(true);
+  const { error, data } = useQuery(GET_MEDIA, {
+    variables: { postId, mediaName: 'cover_photo' },
+  });
 
   React.useEffect(() => {
-    const url = `/get-media?postId=${postId}&mediaName=cover_photo`;
-    fetchData<string>(
-      url,
-      setImageSrc,
-      'imageSrc',
-      'https://source.unsplash.com/random',
-    ).then(() => setLoading(false));
-  }, []);
+    if (!error && data && !data.mediaData.dataSrc.includes('Error')) {
+      setImageSrc(data.mediaData.dataSrc);
+    }
+  }, [data, error]);
 
-  return <PostHeroImage loading={loading} imageSrc={imageSrc} title={title} />;
+  return (
+    <PostHeroImage
+      loading={imageSrc === ''}
+      imageSrc={imageSrc}
+      title={title}
+    />
+  );
 };
 
 export default PostHero;

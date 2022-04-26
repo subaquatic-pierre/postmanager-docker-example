@@ -1,5 +1,13 @@
 import { gql } from '@apollo/client';
 
+export const GET_MEDIA = gql`
+  query GetMedia($postId: String!, $mediaName: String!) {
+    mediaData(postId: $postId, mediaName: $mediaName) {
+      dataSrc
+    }
+  }
+`;
+
 export const ALL_POST_META_DATA = gql`
   query AllPostMetaData {
     allPostMetaData {
@@ -23,6 +31,15 @@ export const GET_POST = gql`
         filename
       }
       content
+    }
+  }
+`;
+
+export const DELETE_POST = gql`
+  mutation DeletePost($postId: String!) {
+    deletePost(postId: $postId) {
+      deleted
+      postId
     }
   }
 `;

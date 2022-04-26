@@ -48,7 +48,7 @@ class PostQuery(ObjectType):
     post_meta_data = Field(PostMetaData, post_id=String(required=True))
     post = Field(Post, post_id=String(required=True))
 
-    media_data = String(post_id=String(required=True), media_name=String(required=True))
+    media_data = Field(MediaData, post_id=String(), media_name=String())
 
     def resolve_post(root, info, post_id):
         post = post_manager.get_by_id(post_id)

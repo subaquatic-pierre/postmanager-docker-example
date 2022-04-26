@@ -10,11 +10,25 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 interface Props {
-  setImageData: (event: any) => void;
+  setFormData: (event: any) => void;
+  formData: any;
 }
 
-const CreatePostImage = ({ setImageData }: Props) => {
+const CreatePostImage = ({ formData, setFormData }: Props) => {
   const hiddenFileInput = React.useRef(null);
+
+  const setImageData = (dataUrl: any) => {
+    setFormData((oldData) => ({
+      ...oldData,
+      mediaData: [
+        ...oldData.mediaData,
+        {
+          mediaName: 'cover_photo',
+          dataUrl: dataUrl,
+        },
+      ],
+    }));
+  };
 
   const handleUploadClick = () => {
     hiddenFileInput.current.click();

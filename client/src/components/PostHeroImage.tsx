@@ -11,7 +11,7 @@ interface Props {
 
 const PostHeroImage = ({ imageSrc, title, loading }: Props) => {
   if (loading) {
-    return <Skeleton animation="wave" variant="rectangular" height="400px" />;
+    return <Skeleton variant="rectangular" height="400px" />;
   } else {
     return (
       <Paper

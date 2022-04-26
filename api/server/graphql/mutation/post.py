@@ -29,8 +29,8 @@ class CreatePost(Mutation):
         # Add media to post
         post_media_data = []
         for media_item in kwargs.get("media_data", []):
-            media_item = MediaIndexItem(media_item["media_name"], "unkown")
-            post_media_data.append(media_item)
+            media_item_index = MediaIndexItem(media_item["media_name"], "unkown")
+            post_media_data.append(media_item_index)
 
             # New post add media
             new_post.add_media(media_item["data_url"], media_item["media_name"])
@@ -68,7 +68,6 @@ class EditPost(Mutation):
         # Update media
         post_media_data = []
         for media_item in kwargs.get("media_data", []):
-            print(media_item)
             media_index_item = MediaIndexItem(media_item["media_name"], "unkown")
             post_media_data.append(media_index_item)
 

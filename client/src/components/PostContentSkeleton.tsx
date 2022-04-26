@@ -3,11 +3,12 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
+import Page from 'components/Page';
 
 const PostContentSkeleton = () => {
   const arr = new Array(10).fill('');
   return (
-    <>
+    <Page>
       <Typography variant="h2">
         <Skeleton width={500} />{' '}
       </Typography>
@@ -25,7 +26,7 @@ const PostContentSkeleton = () => {
           </Typography>
         ))}
       </Box>
-    </>
+    </Page>
   );
 };
 

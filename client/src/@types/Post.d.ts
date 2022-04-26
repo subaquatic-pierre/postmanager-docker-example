@@ -8,20 +8,16 @@ interface PostMetaData {
 interface Post {
   metaData: PostMetaData;
   content: any;
-  media: any[];
+  mediaData: any[];
 }
 
-interface PostFormData {
+interface CreatePostFormData {
   title: string;
   tags: string;
-  coverPhoto: string | ArrayBuffer;
   content: any;
+  mediaData: any[];
 }
 
-interface IPostEditCreateVars {
-  postId?: string;
-  title: string;
-  tags: string;
-  content: string;
-  mediaData?: any;
+interface EditPostFormData extends CreatePostFormData {
+  postId: string;
 }

@@ -1,10 +1,14 @@
 import React from 'react';
+import { useMutation } from '@apollo/client';
+import { useNavigate } from 'react-router';
 
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
 import Link from 'components/Link';
+
+import { DELETE_POST } from 'queries';
 
 interface Props {
   metaData: PostMetaData;
@@ -13,6 +17,21 @@ interface Props {
 const PostMetaData = ({
   metaData: { title, tags, id: postId },
 }: Props): JSX.Element => {
+  const navigate = useNavigate();
+  const [deletePost] = useMutation(DELETE_POST, {
+    variables: { postId },
+  });
+
+  const handleDeleteClick = async () => {
+    const res = await deletePost();
+    if (res.errors) {
+      console.log(res);
+    }
+    if (res.data.deletePost.deleted === true) {
+      navigate('/', { state: { refetchPosts: true } });
+    }
+  };
+
   return (
     <Box
       sx={{ mt: 2 }}
@@ -22,7 +41,7 @@ const PostMetaData = ({
     >
       <Box>
         <Typography variant="h2">{title}</Typography>
-        <Typography variant="body2">Tags: {title}</Typography>
+        <Typography variant="body2">Tags: {tags}</Typography>
       </Box>
       <Box>
         <Link to={`/post/${postId}/edit`}>
@@ -30,14 +49,13 @@ const PostMetaData = ({
             Edit
           </Button>
         </Link>
-        <Button sx={{ mr: 1 }} variant="contained">
-          Change Cover
-        </Button>
-        <Button sx={{ mr: 1 }} color="error" variant="contained">
+        <Button
+          sx={{ mr: 1 }}
+          color="error"
+          variant="contained"
+          onClick={handleDeleteClick}
+        >
           Delete
-        </Button>
-        <Button sx={{ mr: 1 }} color="error" variant="contained">
-          Delete Cover
         </Button>
       </Box>
     </Box>

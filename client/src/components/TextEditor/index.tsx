@@ -9,20 +9,27 @@ import CustomToolbar from './CustomToolbar';
 import { useTheme } from '@emotion/react';
 
 interface Props {
-  setContent: (data: any) => void;
-  content?: any;
+  setFormData: (data: any) => void;
+  data?: any;
 }
 
 const toolbarPlugin = createToolbarPlugin();
 const { Toolbar } = toolbarPlugin;
 const plugins = [toolbarPlugin];
 
-const TextEditor = ({ setContent, content }: Props): JSX.Element => {
+const TextEditor = ({ data: { content }, setFormData }: Props): JSX.Element => {
   const editorRef = React.useRef(null);
   const boxRef = React.useRef(null);
 
   const editorFocus = () => {
     editorRef.current.focus();
+  };
+
+  const setContent = (content: any) => {
+    setFormData((oldData) => ({
+      ...oldData,
+      content,
+    }));
   };
 
   return (

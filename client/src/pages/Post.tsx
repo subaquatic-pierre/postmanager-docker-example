@@ -35,6 +35,7 @@ const Post = (): JSX.Element => {
   const { id: postId } = useParams();
   const { loading, error, data } = useQuery(GET_POST, {
     variables: { postId },
+    fetchPolicy: 'network-only',
   });
 
   const [postData, setPostData] = React.useState<Post>(defaultPost);

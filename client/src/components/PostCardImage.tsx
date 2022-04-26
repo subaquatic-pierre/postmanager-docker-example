@@ -17,6 +17,7 @@ const PostCardImage = ({ postId, mediaName }: Props): JSX.Element => {
 
   const { error, data } = useQuery(GET_MEDIA, {
     variables: { postId, mediaName: 'cover_photo' },
+    fetchPolicy: 'network-only',
   });
 
   React.useEffect(() => {

@@ -26,10 +26,11 @@ const defaultValues: CreatePostFormData = {
 
 const CreatePost = (): JSX.Element => {
   const navigate = useNavigate();
+  const [textEditorContent, setTextEditorContent] = React.useState<any>('');
   const [formData, setFormData] =
     React.useState<CreatePostFormData>(defaultValues);
 
-  const [createPost, { data, loading, error }] = useMutation(CREATE_POST);
+  const [createPost] = useMutation(CREATE_POST);
 
   const getCoverPhotoSrc = (): string => {
     let dataUrl = '';
@@ -45,11 +46,9 @@ const CreatePost = (): JSX.Element => {
     let variables: CreatePostFormData = {
       title: formData.title,
       tags: formData.tags,
-      content: JSON.stringify(formData.content),
+      content: JSON.stringify(textEditorContent),
       mediaData: formData.mediaData,
     };
-
-    console.log(variables);
 
     const res = await createPost({ variables });
     if (res.errors) {
@@ -76,7 +75,7 @@ const CreatePost = (): JSX.Element => {
         </Grid>
         <CreatePostImage formData={formData} setFormData={setFormData} />
       </Grid>
-      <TextEditor data={formData} setFormData={setFormData} />
+      <TextEditor data={formData} setTextEditorContent={setTextEditorContent} />
       <Box sx={{ mb: 4 }} display="flex" justifyContent="flex-end">
         <Button onClick={handleSubmitClick} sx={{ mr: 1 }} variant="contained">
           Submit

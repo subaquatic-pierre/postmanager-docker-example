@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useParams, useNavigate } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
 
 import Page from 'components/Page';
 import PostContentSkeleton from 'components/PostContentSkeleton';
@@ -15,27 +15,31 @@ import CreatePostImage from 'components/CreatePostImage';
 import TextEditor from 'components/TextEditor';
 import PostHeroImage from 'components/PostHeroImage';
 
-import { EDIT_POST } from 'queries';
-
-import { content } from 'filler';
+import { EDIT_POST, GET_POST, GET_MEDIA } from 'queries';
 
 const defaultValues: EditPostFormData = {
   postId: '',
   title: '',
   tags: '',
-  content,
+  content: '',
   mediaData: [],
 };
 
 const EditPost = (): JSX.Element => {
   const { id: postId } = useParams();
   const navigate = useNavigate();
+  const [textEditorContent, setTextEditorContent] = React.useState<any>();
   const [formData, setFormData] =
     React.useState<EditPostFormData>(defaultValues);
-  const [postData, setPostData] = React.useState<Post | false>();
-  const [imageSrc, setImageSrc] = React.useState<string>('');
 
-  const [editPost, { data, loading, error }] = useMutation(EDIT_POST);
+  // Queries
+  const [getMediaSource] = useLazyQuery(GET_MEDIA, {
+    fetchPolicy: 'network-only',
+  });
+  const { data: postData, error } = useQuery(GET_POST, {
+    variables: { postId },
+  });
+  const [editPost, { loading }] = useMutation(EDIT_POST);
 
   const getCoverPhotoSrc = (): string => {
     let dataUrl = '';
@@ -49,24 +53,70 @@ const EditPost = (): JSX.Element => {
 
   const handleSubmitClick = async () => {
     let variables: EditPostFormData = {
-      postId: postId,
+      postId,
       title: formData.title,
       tags: formData.tags,
-      content: JSON.stringify(formData.content),
-      mediaData: [],
+      content: JSON.stringify(textEditorContent),
+      mediaData: formData.mediaData,
     };
 
     const res = await editPost({ variables });
     if (res.errors) {
       console.log(res);
     }
-    if (res.data.deletePost.deleted === true) {
+    if (res.data) {
       navigate('/', { state: { refetchPosts: true } });
     }
   };
 
+  const getImageSrc = async () => {
+    const res = await getMediaSource({
+      variables: { postId: postId, mediaName: 'cover_photo' },
+    });
+    if (res.error) {
+      setFormData((oldData) => ({
+        ...oldData,
+        mediaData: [],
+      }));
+      return;
+    }
+    if (res.data) {
+      setFormData((oldData) => ({
+        ...oldData,
+        mediaData: [
+          {
+            mediaName: 'cover_photo',
+            dataUrl: res.data.mediaData.dataSrc,
+          },
+        ],
+      }));
+    }
+  };
+
   // Fetch post data from api
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    if (postData) {
+      const post = postData.post;
+      getImageSrc();
+      try {
+        setFormData((oldData) => ({
+          ...oldData,
+          postId: postData.post.metaData.id,
+          title: postData.post.metaData.title,
+          tags: postData.post.metaData.tags,
+          content: JSON.parse(postData.post.content),
+        }));
+      } catch (e) {
+        console.log(post);
+        return;
+      }
+    }
+  }, [postData]);
 
   if (loading) return <PostContentSkeleton />;
 
@@ -84,7 +134,7 @@ const EditPost = (): JSX.Element => {
         </Grid>
         <CreatePostImage formData={formData} setFormData={setFormData} />
       </Grid>
-      <TextEditor data={formData} setFormData={setFormData} />
+      <TextEditor data={formData} setTextEditorContent={setTextEditorContent} />
       <Box sx={{ mb: 4 }} display="flex" justifyContent="flex-end">
         <Button onClick={handleSubmitClick} sx={{ mr: 1 }} variant="contained">
           Submit

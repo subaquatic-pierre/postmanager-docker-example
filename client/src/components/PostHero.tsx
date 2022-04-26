@@ -14,6 +14,7 @@ const PostHero = ({ postId, title }: Props): JSX.Element => {
   const [imageSrc, setImageSrc] = React.useState('');
   const { error, data } = useQuery(GET_MEDIA, {
     variables: { postId, mediaName: 'cover_photo' },
+    fetchPolicy: 'network-only',
   });
 
   React.useEffect(() => {

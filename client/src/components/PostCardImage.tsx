@@ -11,12 +11,15 @@ interface Props {
   mediaName: string;
 }
 
-const PostCardImage = ({ postId, mediaName }: Props): JSX.Element => {
+const PostCardImage = ({
+  postId,
+  mediaName = 'cover_photo',
+}: Props): JSX.Element => {
   const [imageSrc, setImageSrc] = React.useState('');
   const [loading, setLoading] = React.useState(true);
 
   const { error, data } = useQuery(GET_MEDIA, {
-    variables: { postId, mediaName: 'cover_photo' },
+    variables: { postId, mediaName },
     fetchPolicy: 'network-only',
   });
 

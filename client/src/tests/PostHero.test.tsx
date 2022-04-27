@@ -1,8 +1,5 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
-
-import { createMemoryHistory } from 'history';
-import { createTestRouter } from 'tests/utils';
 
 import { GET_MEDIA } from 'queries';
 

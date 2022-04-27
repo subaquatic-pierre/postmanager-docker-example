@@ -18,17 +18,19 @@ const PostMetaData = ({
   metaData: { title, tags, id: postId },
 }: Props): JSX.Element => {
   const navigate = useNavigate();
-  const [deletePost] = useMutation(DELETE_POST, {
+  const [deletePost, { error }] = useMutation(DELETE_POST, {
     variables: { postId },
   });
 
   const handleDeleteClick = async () => {
-    const res = await deletePost();
-    if (res.errors) {
-      console.log(res);
-    }
-    if (res.data.deletePost.deleted === true) {
-      navigate('/', { state: { refetchPosts: true } });
+    try {
+      const res = await deletePost();
+
+      if (res.data.deletePost.deleted === true) {
+        navigate('/', { state: { refetchPosts: true } });
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -42,6 +44,9 @@ const PostMetaData = ({
       <Box>
         <Typography variant="h2">{title}</Typography>
         <Typography variant="body2">Tags: {tags}</Typography>
+        {error && (
+          <div data-testid="error-display">{JSON.stringify(error)}</div>
+        )}
       </Box>
       <Box>
         <Link to={`/post/${postId}/edit`}>

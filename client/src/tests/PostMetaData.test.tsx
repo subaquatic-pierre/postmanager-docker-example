@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
+import { GraphQLError } from 'graphql';
 
 import { createMemoryHistory } from 'history';
 import { createTestRouter, checkTextInContent, navCall } from 'tests/utils';
@@ -92,53 +93,50 @@ describe('Test main PostMetaData element', () => {
 
     fireEvent.click(screen.getByText(/Delete/i));
 
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await waitFor(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
 
-    expect(history.push).toHaveBeenCalledWith(
-      {
-        hash: '',
-        pathname: '/',
-        search: '',
-      },
-      { refetchPosts: true },
-    );
+      expect(history.push).toHaveBeenCalledWith(
+        {
+          hash: '',
+          pathname: '/',
+          search: '',
+        },
+        { refetchPosts: true },
+      );
+    });
   });
 
-  // it('Deletes displays error on delete error', () => {
-  // error: new Error('An error occurred'),
-  //   render(
-  //     <MockedProvider >
-  //       <Router>
-  //         <PostMetaData metaData={metaData} />
-  //       </Router>
-  //     </MockedProvider >,
-  //   );
+  it('Deletes displays error on delete error', async () => {
+    const spy = jest.spyOn(global.console, 'log').mockImplementation();
 
-  //   fireEvent.click(screen.getByText(/Delete/i));
+    const mocks = [
+      {
+        request: {
+          query: DELETE_POST,
+          variables: {
+            postId: metaData.id,
+          },
+        },
+        result: {
+          errors: [new GraphQLError('Error!')],
+        },
+      },
+    ];
 
-  //   expect(history.push).toHaveBeenCalledWith(
-  //     navCall(`/post/${metaData.id}/edit`),
-  //     undefined,
-  //   );
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <Router>
+          <PostMetaData metaData={metaData} />
+        </Router>
+      </MockedProvider>,
+    );
 
-  //   expect(screen.getByText(/Cool post/i)).toBeInTheDocument();
-  // });
+    fireEvent.click(screen.getByText(/Delete/i));
 
-  // it('Navigates to home after delete', () => {
-  //   render(
-  //     <MockedProvider >
-  //       <Router>
-  //         <PostMetaData metaData={metaData} />
-  //       </Router>
-  //     </MockedProvider >,
-  //   );
-
-  //   fireEvent.click(screen.getByText(/Edit/i));
-  //   expect(history.push).toHaveBeenCalledWith(
-  //     navCall(`/post/${metaData.id}/edit`),
-  //     undefined,
-  //   );
-
-  //   expect(screen.getByText(/Cool post/i)).toBeInTheDocument();
-  // });
+    await waitFor(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      expect(screen.getByTestId(/error-display/i)).toBeInTheDocument();
+    });
+  });
 });

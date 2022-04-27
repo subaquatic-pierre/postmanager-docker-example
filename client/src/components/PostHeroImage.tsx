@@ -11,10 +11,17 @@ interface Props {
 
 const PostHeroImage = ({ imageSrc, title, loading }: Props) => {
   if (loading) {
-    return <Skeleton variant="rectangular" height="400px" />;
+    return (
+      <Skeleton
+        data-testid="hero-image-skeleton"
+        variant="rectangular"
+        height="400px"
+      />
+    );
   } else {
     return (
       <Paper
+        data-testid="hero-image"
         sx={{
           position: 'relative',
           backgroundColor: 'grey.800',
@@ -28,7 +35,14 @@ const PostHeroImage = ({ imageSrc, title, loading }: Props) => {
         }}
       >
         {/* Increase the priority of the hero background image */}
-        {<img style={{ display: 'none' }} src={imageSrc} alt={title} />}
+        {
+          <img
+            style={{ display: 'none' }}
+            data-testid="hidden-image"
+            src={imageSrc}
+            alt={title}
+          />
+        }
         {/* <Box
           sx={{
             position: 'absolute',

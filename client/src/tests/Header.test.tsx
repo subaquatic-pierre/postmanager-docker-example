@@ -1,8 +1,19 @@
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
+import { createTestRouter } from 'tests/utils';
+
 import Header from 'components/Header';
 
 describe('Test main Header', () => {
+  let Router;
+  let history;
+
+  beforeEach(() => {
+    history = createMemoryHistory();
+    const TestRouter = createTestRouter(history);
+    Router = TestRouter;
+  });
+
   it('Renders without error', () => {
     render(
       <Router>

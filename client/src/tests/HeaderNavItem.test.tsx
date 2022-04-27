@@ -1,27 +1,34 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
+import { createTestRouter } from 'tests/utils';
+
 import HeaderNavItem from 'components/HeaderNavItem';
-import { Router, MemoryRouter } from 'react-router-dom';
 
 const navItem = { title: 'New Post', url: '/post/create' };
 
 describe('Test HeaderNavItem', () => {
+  let Router;
+  let history;
+
+  beforeEach(() => {
+    history = createMemoryHistory();
+    const TestRouter = createTestRouter(history);
+    Router = TestRouter;
+  });
+
   it('Renders without error', () => {
     render(
-      <MemoryRouter>
+      <Router>
         <HeaderNavItem key={1} navItem={navItem} />
-      </MemoryRouter>,
+      </Router>,
     );
 
     expect(screen.getByText(/New Post/i)).toBeInTheDocument();
   });
 
   it('Routes to correct page', () => {
-    const history = createMemoryHistory();
-    history.push = jest.fn();
-
     render(
-      <Router location={history.location} navigator={history}>
+      <Router>
         <HeaderNavItem key={1} navItem={navItem} />
       </Router>,
     );

@@ -1,24 +1,15 @@
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import Footer from 'components/Footer';
 
 describe('Test main Footer', () => {
   it('Renders without error', () => {
-    render(
-      <Router>
-        <Footer />
-      </Router>,
-    );
+    render(<Footer />);
 
     expect(screen.getByText(/PostManager GraphQL/i)).toBeInTheDocument();
   });
 
   it('Renders date', () => {
-    render(
-      <Router>
-        <Footer />
-      </Router>,
-    );
+    render(<Footer />);
 
     const getDate = (content) => {
       const date = new Date().getFullYear().toString();

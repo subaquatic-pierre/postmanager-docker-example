@@ -2,11 +2,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { createTestRouter } from 'tests/utils';
 
-import HeaderNav from 'components/HeaderNav';
+import HomeHero from 'components/HomeHero';
 
-const navList: [NavItem] = [{ title: 'Login', url: '/login' }];
-
-describe('Test Header Nav', () => {
+describe('Test main HomeHero', () => {
   let Router;
   let history;
 
@@ -19,26 +17,26 @@ describe('Test Header Nav', () => {
   it('Renders without error', () => {
     render(
       <Router>
-        <HeaderNav navList={navList} />
+        <HomeHero />
       </Router>,
     );
 
-    expect(screen.getByText(/Login/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/PostManager/i)[0]).toBeInTheDocument();
   });
 
-  it('Routes to correct page', () => {
+  it('Routes to create post page', () => {
     render(
       <Router>
-        <HeaderNav navList={navList} />
+        <HomeHero />
       </Router>,
     );
 
-    fireEvent.click(screen.getByText(/Login/i));
+    fireEvent.click(screen.getByText(/New Post/i));
 
     expect(history.push).toHaveBeenCalledWith(
       {
         hash: '',
-        pathname: '/login',
+        pathname: '/post/create',
         search: '',
       },
       undefined,

@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { createTestRouter } from 'tests/utils';
+import { createTestRouter, navCall } from 'tests/utils';
 
 import HeaderNavItem from 'components/HeaderNavItem';
 
@@ -36,11 +36,7 @@ describe('Test HeaderNavItem', () => {
     fireEvent.click(screen.getByText(/New Post/i));
 
     expect(history.push).toHaveBeenCalledWith(
-      {
-        hash: '',
-        pathname: '/post/create',
-        search: '',
-      },
+      navCall('/post/create'),
       undefined,
     );
   });

@@ -1,4 +1,6 @@
 import { render, screen } from '@testing-library/react';
+import { checkTextInContent } from 'tests/utils';
+
 import Footer from 'components/Footer';
 
 describe('Test main Footer', () => {
@@ -11,11 +13,8 @@ describe('Test main Footer', () => {
   it('Renders date', () => {
     render(<Footer />);
 
-    const getDate = (content) => {
-      const date = new Date().getFullYear().toString();
-      return content.includes(date);
-    };
+    const date = new Date().getFullYear().toString();
 
-    expect(screen.getByText(getDate)).toBeInTheDocument();
+    expect(screen.getByText(checkTextInContent(date))).toBeInTheDocument();
   });
 });

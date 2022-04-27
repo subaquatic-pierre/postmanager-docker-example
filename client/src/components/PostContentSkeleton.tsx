@@ -18,7 +18,7 @@ const PostContentSkeleton = () => {
       <Typography variant="caption">
         <Skeleton width={200} />{' '}
       </Typography>
-      <Box sx={{ mt: 2 }}>
+      <Box data-testid="skeleton-text" sx={{ mt: 2 }}>
         {arr.map((el, i) => (
           <Typography key={i} variant="body1">
             <Skeleton width={i % 2 === 0 ? 800 : 810} />

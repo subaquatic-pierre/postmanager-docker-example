@@ -138,5 +138,6 @@ describe('Test main PostMetaData element', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
       expect(screen.getByTestId(/error-display/i)).toBeInTheDocument();
     });
+    expect(spy).toHaveBeenCalled();
   });
 });

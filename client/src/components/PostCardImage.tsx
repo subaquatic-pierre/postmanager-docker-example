@@ -30,11 +30,21 @@ const PostCardImage = ({
     }
   }, [data, error]);
 
+  if (error) return <div>Error {JSON.stringify(error)}</div>;
+
   if (loading) {
-    return <Skeleton animation="wave" variant="rectangular" height="300px" />;
+    return (
+      <Skeleton
+        data-testid="card-image-loading"
+        animation="wave"
+        variant="rectangular"
+        height="300px"
+      />
+    );
   } else {
     return (
       <CardMedia
+        data-testid="card-image"
         component={'img'}
         image={imageSrc}
         alt="random"

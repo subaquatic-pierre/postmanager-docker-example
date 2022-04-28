@@ -19,19 +19,23 @@ interface Props {
 
 const PostGridItem = ({ data }: Props): JSX.Element => {
   const navigate = useNavigate();
-  const [deletePost] = useMutation(DELETE_POST, {
+  const [deletePost, { error }] = useMutation(DELETE_POST, {
     variables: { postId: data.id },
   });
 
   const handleDeleteClick = async () => {
-    const res = await deletePost();
-    if (res.errors) {
-      console.log(res);
-    }
-    if (res.data.deletePost.deleted === true) {
-      navigate('/', { state: { refetchPosts: true } });
+    try {
+      const res = await deletePost();
+
+      if (res.data.deletePost.deleted === true) {
+        navigate('/', { state: { refetchPosts: true } });
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
+
+  if (error) return <div>Error {JSON.stringify(error)}</div>;
 
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>

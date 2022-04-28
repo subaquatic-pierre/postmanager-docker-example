@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 interface Props {
-  metaData: PostMetaData;
   content: any;
 }
 
@@ -16,27 +15,37 @@ const renderComponent = (
   switch (type) {
     case 'header':
       return (
-        <Typography key={index} sx={{ mb: 2 }} variant="h5">
+        <Typography
+          key={index}
+          data-testid="content-h5"
+          sx={{ mb: 2 }}
+          variant="h5"
+        >
           {content}
         </Typography>
       );
     case 'paragraph':
       return (
-        <Typography key={index} sx={{ mb: 1 }} variant="body1">
+        <Typography
+          key={index}
+          data-testid="content-body1"
+          sx={{ mb: 1 }}
+          variant="body1"
+        >
           {content}
         </Typography>
       );
 
     default:
       return (
-        <Typography key={index} variant="body1">
+        <Typography key={index} data-testid="content-default" variant="body1">
           {content}
         </Typography>
       );
   }
 };
 
-const PostContent = ({ metaData, content }: Props) => {
+const PostContent = ({ content }: Props) => {
   const [blocks, setBlocks] = React.useState([]);
 
   React.useEffect(() => {
@@ -46,7 +55,7 @@ const PostContent = ({ metaData, content }: Props) => {
   }, [content]);
 
   return (
-    <Box sx={{ mt: 2 }}>
+    <Box data-testid="content-box" sx={{ mt: 2 }}>
       {blocks.map((block, i) => renderComponent(block.type, block.text, i))}
     </Box>
   );

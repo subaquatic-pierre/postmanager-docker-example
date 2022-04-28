@@ -62,7 +62,7 @@ const Post = (): JSX.Element => {
     <Page>
       <PostHero title={postData.metaData.title} postId={postId} />
       <PostMetaData metaData={postData.metaData} />
-      <PostContent metaData={postData.metaData} content={postData.content} />
+      <PostContent content={postData.content} />
     </Page>
   );
 };

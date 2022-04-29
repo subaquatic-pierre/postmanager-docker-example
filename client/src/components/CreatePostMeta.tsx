@@ -18,7 +18,12 @@ const CreatePostMeta = ({ setFormData, data }: Props): JSX.Element => {
   };
 
   return (
-    <Box component="form" noValidate autoComplete="off">
+    <Box
+      component="form"
+      data-testid="create-meta-form"
+      noValidate
+      autoComplete="off"
+    >
       <Stack spacing={2}>
         <TextField
           onChange={handleTextInputChange}
